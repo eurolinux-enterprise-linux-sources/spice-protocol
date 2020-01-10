@@ -1,6 +1,6 @@
 Name:           spice-protocol
-Version:        0.8.0
-Release:        1%{?dist}
+Version:        0.8.1
+Release:        2%{?dist}
 Summary:        Spice protocol header files
 Group:          Development/Libraries
 # Main headers are BSD, controller / foreign menu are LGPL
@@ -9,14 +9,21 @@ URL:            http://www.spice-space.org/
 Source0:        http://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
 BuildArch:      noarch
 
+
+Patch1:		0001-Release-0.8.2.patch
+
+BuildRequires:  autoconf automake
+
 %description
 Header files describing the spice protocol
 and the para-virtual graphics card QXL.
 
 %prep
 %setup -q
+%patch1 -p1
 
 %build
+autoreconf -f -i
 %configure
 make %{?_smp_mflags}
 
@@ -30,6 +37,16 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/pkgconfig/spice-protocol.pc
 
 %changelog
+* Tue Sep 27 2011 Uri Lublin <uril@redhat.com> - 0.8.1-2
+- Support for spice client semi-seemless migration.
+- Update to upstream spice-protocol 0.8.2 release without rebasing
+- Added "BuildRequires: autoconf automake" for using autoreconf
+  Resolves: rhbz#738262
+
+* Fri Jul 22 2011 Uri Lublin <uril@redhat.com> - 0.8.1-1
+- Update to upstream 0.8.1 release
+  Resolves: rhbz#723480
+
 * Wed Mar  2 2011 Hans de Goede <hdegoede@redhat.com> - 0.8.0-1
 - Update to upstream 0.8.0 release
   Related: rhbz#662992

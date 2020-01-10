@@ -1,0 +1,85 @@
+From abfdf4d8abf95d003678af5df814f3b1be1fd092 Mon Sep 17 00:00:00 2001
+From: Yonit Halperin <yhalperi@redhat.com>
+Date: Tue, 13 Sep 2011 12:23:20 +0300
+Subject: [PATCH] Release 0.8.2
+
+semi-seamless migration RHBZ 738262
+---
+ NEWS             |    4 ++++
+ configure.ac     |    2 +-
+ spice/enums.h    |    2 ++
+ spice/protocol.h |    6 +++++-
+ 4 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/NEWS b/NEWS
+index f238abc..bb11ed2 100644
+--- a/NEWS
++++ b/NEWS
+@@ -1,3 +1,7 @@
++Major changes in 0.8.2
++======================
++* Add support for semi-seamless migration
++
+ Major changes in 0.8.1
+ ======================
+ * Add support for volume change
+diff --git a/configure.ac b/configure.ac
+index 989cb00..4ec1990 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,7 +2,7 @@ AC_PREREQ([2.57])
+ 
+ m4_define([SPICE_MAJOR], 0)
+ m4_define([SPICE_MINOR], 8)
+-m4_define([SPICE_MICRO], 1)
++m4_define([SPICE_MICRO], 2)
+ 
+ AC_INIT(spice-protocol, [SPICE_MAJOR.SPICE_MINOR.SPICE_MICRO], [], spice-protocol)
+ 
+diff --git a/spice/enums.h b/spice/enums.h
+index 756df56..fcfc3bb 100644
+--- a/spice/enums.h
++++ b/spice/enums.h
+@@ -364,6 +364,7 @@ enum {
+     SPICE_MSG_MAIN_AGENT_DATA,
+     SPICE_MSG_MAIN_AGENT_TOKEN,
+     SPICE_MSG_MAIN_MIGRATE_SWITCH_HOST,
++    SPICE_MSG_MAIN_MIGRATE_END,
+ 
+     SPICE_MSG_END_MAIN
+ };
+@@ -377,6 +378,7 @@ enum {
+     SPICE_MSGC_MAIN_AGENT_START,
+     SPICE_MSGC_MAIN_AGENT_DATA,
+     SPICE_MSGC_MAIN_AGENT_TOKEN,
++    SPICE_MSGC_MAIN_MIGRATE_END,
+ 
+     SPICE_MSGC_END_MAIN
+ };
+diff --git a/spice/protocol.h b/spice/protocol.h
+index 40027be..ddfe84b 100644
+--- a/spice/protocol.h
++++ b/spice/protocol.h
+@@ -37,7 +37,7 @@
+ 
+ #define SPICE_MAGIC (*(uint32_t*)"REDQ")
+ #define SPICE_VERSION_MAJOR 2
+-#define SPICE_VERSION_MINOR 0
++#define SPICE_VERSION_MINOR 1
+ 
+ // Encryption & Ticketing Parameters
+ #define SPICE_MAX_PASSWORD_LENGTH 60
+@@ -111,6 +111,10 @@ enum {
+     SPICE_RECORD_CAP_VOLUME,
+ };
+ 
++enum {
++    SPICE_MAIN_CAP_SEMI_SEAMLESS_MIGRATE,
++};
++
+ #include <spice/end-packed.h>
+ 
+ #endif /* _H_SPICE_PROTOCOL */
+-- 
+1.7.1
+
