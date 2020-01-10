@@ -1,0 +1,54 @@
+From 9365d4dd1411bf1dcfeb056dfb847dac882f9fda Mon Sep 17 00:00:00 2001
+From: Yonit Halperin <yhalperi@redhat.com>
+Date: Sun, 6 May 2012 11:03:04 +0300
+Subject: [PATCH 1/2] video streaming: add support for frames of different
+ sizes
+
+rhbz #815422
+
+Add SPICE_MSG_DISPLAY_STREAM_DATA_SIZED, for stream_data message
+that in addition to the mjpeg data, also contains the
+(1) width and height of the compressed frame.
+(2) the destination box of the frame.
+The server can send such messages only to clients with
+SPICE_DISPLAY_CAP_SIZED_STREAM.
+
+When playing a youtube video on Windows guest, the driver sometimes sends
+images which contain the video frames, but also other parts of the
+screen (e.g., the youtube process bar). In order to prevent glitches, we send these
+images as part of the stream, using SPICE_MSG_DISPLAY_STREAM_DATA_SIZED.
+---
+ spice/enums.h    |    1 +
+ spice/protocol.h |    4 ++++
+ 2 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/spice/enums.h b/spice/enums.h
+index 7325180..f76d6b0 100644
+--- a/spice/enums.h
++++ b/spice/enums.h
+@@ -413,6 +413,7 @@ enum {
+     SPICE_MSG_DISPLAY_DRAW_ALPHA_BLEND,
+     SPICE_MSG_DISPLAY_SURFACE_CREATE,
+     SPICE_MSG_DISPLAY_SURFACE_DESTROY,
++    SPICE_MSG_DISPLAY_STREAM_DATA_SIZED,
+ 
+     SPICE_MSG_END_DISPLAY
+ };
+diff --git a/spice/protocol.h b/spice/protocol.h
+index 5c7f286..d511434 100644
+--- a/spice/protocol.h
++++ b/spice/protocol.h
+@@ -121,6 +121,10 @@ enum {
+     SPICE_MAIN_CAP_SEMI_SEAMLESS_MIGRATE,
+ };
+ 
++enum {
++    SPICE_DISPLAY_CAP_SIZED_STREAM,
++};
++
+ #include <spice/end-packed.h>
+ 
+ #endif /* _H_SPICE_PROTOCOL */
+-- 
+1.7.7.6
+
