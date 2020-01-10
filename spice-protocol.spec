@@ -1,20 +1,13 @@
 Name:           spice-protocol
-Version:        0.10.1
-Release:        5%{?dist}
+Version:        0.12.2
+Release:        1%{?dist}
 Summary:        Spice protocol header files
 Group:          Development/Libraries
 # Main headers are BSD, controller / foreign menu are LGPL
 License:        BSD and LGPLv2+
 URL:            http://www.spice-space.org/
 Source0:        http://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
-#Upstream patch
-Patch0:         0001-Add-controller-message-ENABLE_SMARTCARD.patch
-#Upstream patch
-Patch1:         0002-controller-add-COLOR_DEPTH-and-DISABLE_EFFECTS-messa.patch
-#Upstream patch
-Patch2:         0003-Add-controller-messages-for-USB-redirection.patch
-Patch3:         0004-video-streaming-add-support-for-frames-of-different-sizes.patch
-Patch4:         0005-Release-0.10.3.patch
+
 BuildArch:      noarch
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -25,11 +18,6 @@ and the para-virtual graphics card QXL.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %build
 autoreconf -fi
@@ -46,6 +34,28 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/pkgconfig/spice-protocol.pc
 
 %changelog
+* Thu Sep 20 2012 Uri Lublin <uril@redhat.com> 0.12.2-1
+- Rebase to upstream spice-protocol 0.12.2, which adds:
+  0.12.2:
+  + Add A8 surface capability in display channel.
+  + Add to qxl device support for:
+    = client present
+    = client capabilities
+    = client monitors configuration
+  0.12.1:
+  + Support seamless migration.
+  + New QXLComposite message for better X support.
+  + Support arbitrary scancode message INPUTS_KEY_SCANCODE.
+  0.12.0:
+  + Add support for arbitrary resolution on Windows QXL with
+    QXL_ESCAPE_SET_CUSTOM_DISPLAY
+  + Add support for arbitrary resolution and multiple monitor per
+    display channel with QXLMonitorsConfig and co
+  + build cleanup
+  Resolves: rhbz#842352
+  Resolves: rhbz#846910
+ 
+
 * Mon May 07 2012 Yonit Halperin <yhalperi@redhat.com> - 0.10.1-4
 - Add autoreconf to spec in order to regenerate spice-protocol.pc
   Resolves: rhbz#815422
