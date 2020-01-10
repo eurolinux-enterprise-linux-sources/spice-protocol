@@ -1,5 +1,5 @@
 Name:           spice-protocol
-Version:        0.12.2
+Version:        0.12.6
 Release:        1%{?dist}
 Summary:        Spice protocol header files
 Group:          Development/Libraries
@@ -34,6 +34,23 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/pkgconfig/spice-protocol.pc
 
 %changelog
+* Wed Jun 26 2013 Yonit Lublin <yhalperi@redhat.com> 0.12.6-1
+- Rebase to upstream spice-protocol 0.12.6, which adds:
+  0.12.6
+  + Add adaptive video streaming support:
+    control playback latency and receive playback
+    reports from the client.
+  + Add agent capabilities for signaling guest line ending.
+  0.12.5
+  + Add agent file xfer success status
+  + Add a client-disconnected agent message
+  0.12.4
+  + Add agent file copy support.
+  + Add agent sparse monitors capability.
+  + Add controller proxy message.
+  0.12.3
+  +Add a generic "port" channel
+
 * Thu Sep 20 2012 Uri Lublin <uril@redhat.com> 0.12.2-1
 - Rebase to upstream spice-protocol 0.12.2, which adds:
   0.12.2:
