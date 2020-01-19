@@ -1,12 +1,12 @@
 Name:           spice-protocol
-Version:        0.12.11
-Release:        1%{?dist}
+Version:        0.12.12
+Release:        2%{?dist}
 Summary:        Spice protocol header files
 Group:          Development/Libraries
 # Main headers are BSD, controller / foreign menu are LGPL
 License:        BSD and LGPLv2+
-URL:            http://www.spice-space.org/
-Source0:        http://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
+URL:            https://www.spice-space.org/
+Source0:        https://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
 BuildArch:      noarch
 
 %description
@@ -34,6 +34,14 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
+* Mon Mar 13 2017 Pavel Grunt <pgrunt@redhat.com> - 0.12.12-2
+- Rebuilt with correct hardening flags due to bug 1387475
+- Resolves: rhbz#1420779
+
+* Fri Dec 16 2016 Pavel Grunt <pgrunt@redhat.com> - 0.12.12-1
+- Update to 0.12.12
+- Resolves: rhbz#1402729
+
 * Fri Apr 29 2016 Victor Toso <victortoso@redhat.com> - 0.12.11-1
 - Update to 0.12.11
 - Resolves: rhbz#1322363
