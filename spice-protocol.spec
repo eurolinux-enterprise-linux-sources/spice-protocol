@@ -1,17 +1,12 @@
 Name:           spice-protocol
-Version:        0.12.13
-Release:        2%{?dist}
+Version:        0.12.14
+Release:        1%{?dist}
 Summary:        Spice protocol header files
 Group:          Development/Libraries
 # Main headers are BSD, controller / foreign menu are LGPL
 License:        BSD and LGPLv2+
 URL:            https://www.spice-space.org/
 Source0:        https://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
-Patch1:         0001-Add-protocol-to-send-streams-to-server.patch
-Patch2:         0002-Add-a-message-to-control-guest-streaming.patch
-Patch3:         0003-Add-error-reports-from-server-to-guest.patch
-Patch4:         0004-Add-support-for-setting-cursor-shape-from-guest.patch
-Patch5:         0005-Add-support-for-mouse-movement.patch
 
 BuildArch:      noarch
 BuildRequires:  automake autoconf git-core
@@ -42,6 +37,10 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
+* Fri Jun 08 2018 Victor Toso <victortoso@redhat.com> - 0.12.14-1
+- Update to 0.12.14
+  Related: rhbz#1562129
+
 * Thu Oct 12 2017 Christophe Fergeau <cfergeau@redhat.com> - 0.12.13-2
 - Add streaming patches for use in combination with spice-streaming-agent
   Related: rhbz#1471000
