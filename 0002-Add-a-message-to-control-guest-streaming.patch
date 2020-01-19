@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Frediano Ziglio <fziglio@redhat.com>
+Date: Thu, 19 Jan 2017 12:36:27 +0000
+Subject: [spice-protocol] Add a message to control guest streaming
+
+Allows server to tell codec and start/stop the streaming
+
+Acked-by: Christophe de Dinechin <cdupontd@redhat.com>
+---
+ spice/stream-device.h | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/spice/stream-device.h b/spice/stream-device.h
+index 427095b..0185fbd 100644
+--- a/spice/stream-device.h
++++ b/spice/stream-device.h
+@@ -81,6 +81,8 @@ typedef enum StreamMsgType {
+     STREAM_TYPE_FORMAT,
+     /* stream data */
+     STREAM_TYPE_DATA,
++    /* server ask to start a new stream */
++    STREAM_TYPE_START_STOP,
+ } StreamMsgType;
+ 
+ /* Generic extension capabilities.
+@@ -125,4 +127,21 @@ typedef struct StreamMsgData {
+     uint8_t data[0];
+ } StreamMsgData;
+ 
++/* Tell to stop current stream and possibly start a new one.
++ * This message is sent by the host to the guest.
++ * Allows to communicate the codecs supported by the clients.
++ * The agent should stop the old stream and if any codec in the
++ * list is supported start streaming (as Mjpeg is always supported
++ * agent should stop only on a real stop request).
++ *
++ * States allowed: any
++ *   state will change to Idle (no codecs) or Ready
++ */
++typedef struct StreamMsgStartStop {
++    /* supported codecs, 0 to stop streaming */
++    uint8_t num_codecs;
++    /* as defined in SpiceVideoCodecType enumeration */
++    uint8_t codecs[0];
++} StreamMsgStartStop;
++
+ #endif /* SPICE_STREAM_DEVICE_H_ */

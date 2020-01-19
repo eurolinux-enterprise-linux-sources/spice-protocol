@@ -1,5 +1,5 @@
 Name:           spice-protocol
-Version:        0.12.12
+Version:        0.12.13
 Release:        2%{?dist}
 Summary:        Spice protocol header files
 Group:          Development/Libraries
@@ -7,7 +7,14 @@ Group:          Development/Libraries
 License:        BSD and LGPLv2+
 URL:            https://www.spice-space.org/
 Source0:        https://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
+Patch1:         0001-Add-protocol-to-send-streams-to-server.patch
+Patch2:         0002-Add-a-message-to-control-guest-streaming.patch
+Patch3:         0003-Add-error-reports-from-server-to-guest.patch
+Patch4:         0004-Add-support-for-setting-cursor-shape-from-guest.patch
+Patch5:         0005-Add-support-for-mouse-movement.patch
+
 BuildArch:      noarch
+BuildRequires:  automake autoconf git-core
 
 %description
 Header files describing the spice protocol
@@ -15,10 +22,11 @@ and the para-virtual graphics card QXL.
 
 
 %prep
-%setup -q
+%autosetup -S git_am
 
 
 %build
+autoreconf -fi
 %configure
 make %{?_smp_mflags}
 
@@ -34,6 +42,14 @@ make DESTDIR=%{buildroot} install
 
 
 %changelog
+* Thu Oct 12 2017 Christophe Fergeau <cfergeau@redhat.com> - 0.12.13-2
+- Add streaming patches for use in combination with spice-streaming-agent
+  Related: rhbz#1471000
+
+* Thu Jul 20 2017 Uri Lublin <uril@redhat.com> - 0.12.13-1
+- Update to 0.12.13
+- Related: rhbz#1471000
+
 * Mon Mar 13 2017 Pavel Grunt <pgrunt@redhat.com> - 0.12.12-2
 - Rebuilt with correct hardening flags due to bug 1387475
 - Resolves: rhbz#1420779

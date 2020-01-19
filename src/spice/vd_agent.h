@@ -66,10 +66,23 @@ enum {
     VD_AGENT_MOUSE_STATE = 1,
     VD_AGENT_MONITORS_CONFIG,
     VD_AGENT_REPLY,
+    /* Set clipboard data (both directions).
+     * Message comes with type and data.
+     * See VDAgentClipboard structure.
+     */
     VD_AGENT_CLIPBOARD,
     VD_AGENT_DISPLAY_CONFIG,
     VD_AGENT_ANNOUNCE_CAPABILITIES,
+    /* Asks to listen for clipboard changes (both directions).
+     * Remote should empty clipboard and wait for one
+     * of the types passed.
+     * See VDAgentClipboardGrab structure.
+     */
     VD_AGENT_CLIPBOARD_GRAB,
+    /* Asks for clipboard data (both directions).
+     * Request comes with a specific type.
+     * See VDAgentClipboardRequest structure.
+     */
     VD_AGENT_CLIPBOARD_REQUEST,
     VD_AGENT_CLIPBOARD_RELEASE,
     VD_AGENT_FILE_XFER_START,
@@ -86,11 +99,25 @@ enum {
     VD_AGENT_FILE_XFER_STATUS_CANCELLED,
     VD_AGENT_FILE_XFER_STATUS_ERROR,
     VD_AGENT_FILE_XFER_STATUS_SUCCESS,
+    VD_AGENT_FILE_XFER_STATUS_NOT_ENOUGH_SPACE,
+    VD_AGENT_FILE_XFER_STATUS_SESSION_LOCKED,
+    VD_AGENT_FILE_XFER_STATUS_VDAGENT_NOT_CONNECTED,
+    VD_AGENT_FILE_XFER_STATUS_DISABLED,
 };
 
 typedef struct SPICE_ATTR_PACKED VDAgentFileXferStatusMessage {
    uint32_t id;
    uint32_t result;
+   /* Used to send additional data for detailed error messages
+    * to clients with VD_AGENT_CAP_FILE_XFER_DETAILED_ERRORS capability.
+    * Type of data varies with the result:
+    * result : data type (NULL if no data)
+    * VD_AGENT_FILE_XFER_STATUS_NOT_ENOUGH_SPACE : uint64_t
+    * VD_AGENT_FILE_XFER_STATUS_SESSION_LOCKED : NULL
+    * VD_AGENT_FILE_XFER_STATUS_VDAGENT_NOT_CONNECTED : NULL
+    * VD_AGENT_FILE_XFER_STATUS_DISABLED : NULL
+    */
+   uint8_t data[0];
 } VDAgentFileXferStatusMessage;
 
 typedef struct SPICE_ATTR_PACKED VDAgentFileXferStartMessage {
@@ -180,6 +207,12 @@ enum {
     VD_AGENT_CLIPBOARD_IMAGE_JPG,  /* optional */
 };
 
+enum {
+    VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD = 0,
+    VD_AGENT_CLIPBOARD_SELECTION_PRIMARY,
+    VD_AGENT_CLIPBOARD_SELECTION_SECONDARY,
+};
+
 typedef struct SPICE_ATTR_PACKED VDAgentClipboardGrab {
 #if 0 /* VD_AGENT_CAP_CLIPBOARD_SELECTION */
     uint8_t selection;
@@ -228,13 +261,9 @@ enum {
     VD_AGENT_CAP_MAX_CLIPBOARD,
     VD_AGENT_CAP_AUDIO_VOLUME_SYNC,
     VD_AGENT_CAP_MONITORS_CONFIG_POSITION,
+    VD_AGENT_CAP_FILE_XFER_DISABLED,
+    VD_AGENT_CAP_FILE_XFER_DETAILED_ERRORS,
     VD_AGENT_END_CAP,
-};
-
-enum {
-    VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD = 0,
-    VD_AGENT_CLIPBOARD_SELECTION_PRIMARY,
-    VD_AGENT_CLIPBOARD_SELECTION_SECONDARY,
 };
 
 typedef struct SPICE_ATTR_PACKED VDAgentAnnounceCapabilities {
@@ -254,6 +283,9 @@ typedef struct SPICE_ATTR_PACKED VDAgentAnnounceCapabilities {
 
 #define VD_AGENT_SET_CAPABILITY(caps, index) \
     { (caps)[(index) / 32] |= (1 << ((index) % 32)); }
+
+#define VD_AGENT_CLEAR_CAPABILITY(caps, index) \
+    { (caps)[(index) / 32] &= ~(1 << ((index) % 32)); }
 
 #include <spice/end-packed.h>
 
