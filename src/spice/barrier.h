@@ -34,7 +34,12 @@
 
 #ifdef __GNUC__
 
-#define spice_mb() __sync_synchronize ()
+#ifdef __i386__
+#define spice_mb() __asm__ __volatile__ ("lock; addl $0,0(%%esp)": : :"memory")
+#else
+//mfence
+#define spice_mb() __asm__ __volatile__ ("lock; addl $0,0(%%rsp)": : :"memory")
+#endif
 
 #else
 

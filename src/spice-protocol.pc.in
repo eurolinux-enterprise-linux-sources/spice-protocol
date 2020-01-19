@@ -1,6 +1,5 @@
 prefix=@prefix@
 includedir=@includedir@
-datadir=${prefix}/share
 
 Name: spice-protocol
 Description: SPICE protocol headers

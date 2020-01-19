@@ -34,13 +34,8 @@
 #include <spice/types.h>
 #include <spice/barrier.h>
 #include <spice/ipc_ring.h>
-#include <spice/macros.h>
 
 #include <spice/start-packed.h>
-
-#ifndef SPICE_DISABLE_DEPRECATED
-#error "This SPICE interface is deprecated"
-#endif
 
 #define REDHAT_PCI_VENDOR_ID 0x1b36
 
@@ -49,7 +44,7 @@
 
 #define VDI_PORT_INTERRUPT (1 << 0)
 
-#define VDI_PORT_MAGIC SPICE_MAGIC_CONST("VDIP")
+#define VDI_PORT_MAGIC (*(uint32_t*)"VDIP")
 
 typedef struct SPICE_ATTR_PACKED VDIPortPacket {
     uint32_t gen;

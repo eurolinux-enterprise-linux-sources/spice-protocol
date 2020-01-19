@@ -1,5 +1,4 @@
 NULL =
-ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = spice
 
 pkgconfigdir = $(datadir)/pkgconfig
